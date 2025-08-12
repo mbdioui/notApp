@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 
-@Preview
+@Preview(showBackground = true,)
 @Composable
 fun OffsetBackgroundCard(
     modifier: Modifier = Modifier,
@@ -33,7 +33,7 @@ fun OffsetBackgroundCard(
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .offset(x = -4.dp, y = -6.dp)
+                .offset(x = (-4).dp, y = (-6).dp)
                 .clip(RoundedCornerShape(16.dp))
                 .clickable(true, onClick = onClick)// Offset as needed
                 .background(backgroundColor, shape = RoundedCornerShape(16.dp))
@@ -47,7 +47,7 @@ fun OffsetBackgroundCard(
                 .padding(16.dp) // Padding between border and content
         ) {
             // Place your content here
-            Text("$label") // Example
+            Text(label) // Example
         }
     }
 }
