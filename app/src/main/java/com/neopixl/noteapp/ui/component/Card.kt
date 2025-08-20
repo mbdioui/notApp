@@ -7,33 +7,43 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.neopixl.noteapp.ui.theme.NoteAppTheme
 
 
-@Preview(showBackground = true,)
+@Preview(showBackground = true)
 @Composable
 fun OffsetBackgroundCard(
-    modifier: Modifier = Modifier,
-    backgroundColor: Color = Color(0xFFD5B4FF),
+    modifier: Modifier = Modifier.padding(top = 8.dp, bottom = 4.dp, start = 7.dp, end = 4.dp),
+    backgroundColor: Color = MaterialTheme.colorScheme.primary,
     borderColor: Color = Color.Black,
     borderWidth: Dp = 2.dp,
+    maxWidth: Boolean = false,
     onClick: () -> Unit = {},
-    label: String = "sample"
+    content: @Composable () -> Unit = {Text("Sample")}
 ) {
+    val boxWidthModifier = if (maxWidth) Modifier.fillMaxWidth() else Modifier.wrapContentWidth()
+
     Box(modifier = modifier) {
         // Offset background
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .offset(x = (-4).dp, y = (-6).dp)
+                .offset(x = (-6).dp, y = (-6).dp)
                 .clip(RoundedCornerShape(16.dp))
                 .clickable(true, onClick = onClick)// Offset as needed
                 .background(backgroundColor, shape = RoundedCornerShape(16.dp))
@@ -41,13 +51,51 @@ fun OffsetBackgroundCard(
         // Foreground content with border
         Box(
             modifier = Modifier
-                .fillMaxWidth()
+                .then(boxWidthModifier)
                 .border(borderWidth, borderColor, RoundedCornerShape(16.dp))
                 .background(Color.Transparent, shape = RoundedCornerShape(16.dp))
                 .padding(16.dp) // Padding between border and content
         ) {
             // Place your content here
-            Text(label) // Example
+            content()// Example
+        }
+    }
+}
+
+
+@Preview
+@Composable
+fun NumberPicto(
+    number: Int = 1
+) {
+    NoteAppTheme {
+        Box(
+
+        ) {
+            Box(
+                Modifier
+                    .size(45.dp)
+                    .align(Alignment.Center)
+                    .offset(-3.dp, -3.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(MaterialTheme.colorScheme.surface)
+
+            )
+            Box(
+                modifier = Modifier
+                    .size(45.dp)
+                    .align(Alignment.Center)
+                    .clip(RoundedCornerShape(16.dp))
+                    .border(1.dp, Color.Black, RoundedCornerShape(16.dp))
+            ) {
+                Text(
+                    text = "$number",
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
         }
     }
 }
