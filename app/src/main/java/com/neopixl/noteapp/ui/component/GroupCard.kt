@@ -92,7 +92,7 @@ fun GroupCard(
                     { newState -> expanded = newState }
                 )
             }
-            if (!expanded)
+            if (expanded)
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -227,7 +227,7 @@ private fun DescriptionRow(iconTint: Color) {
                 .size(45.dp)
                 .clip(CircleShape)
         )
-        Text("Club ASH Baby athlé", modifier = Modifier.weight(1f))
+        HighlightedText("Club ASH Baby athlé", modifier = Modifier.weight(1f))
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
             contentDescription = null,
@@ -248,7 +248,8 @@ fun Tag(
             modifier = Modifier
                 .wrapContentWidth()
                 .background(
-                    shape = RoundedCornerShape(15.dp), color = MaterialTheme.colorScheme.background
+                    shape = RoundedCornerShape(15.dp),
+                    color = MaterialTheme.colorScheme.primary
                 )
                 .padding(horizontal = 16.dp)
                 .then(modifier),
