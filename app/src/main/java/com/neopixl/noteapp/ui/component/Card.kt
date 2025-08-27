@@ -1,5 +1,7 @@
 package com.neopixl.noteapp.ui.component
 
+import android.R.attr.maxWidth
+import android.R.attr.onClick
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -31,10 +33,10 @@ fun OffsetBackgroundCard(
     modifier: Modifier = Modifier.padding(top = 8.dp, bottom = 4.dp, start = 7.dp, end = 4.dp),
     backgroundColor: Color = MaterialTheme.colorScheme.primary,
     borderColor: Color = Color.Black,
-    borderWidth: Dp = 2.dp,
+    borderWidth: Dp = 0.7.dp,
     maxWidth: Boolean = false,
     onClick: () -> Unit = {},
-    content: @Composable () -> Unit = {Text("Sample")}
+    content: @Composable () -> Unit = { Text("Sample") }
 ) {
     val boxWidthModifier = if (maxWidth) Modifier.fillMaxWidth() else Modifier.wrapContentWidth()
 
@@ -63,39 +65,3 @@ fun OffsetBackgroundCard(
 }
 
 
-@Preview
-@Composable
-fun NumberPicto(
-    number: Int = 1
-) {
-    NoteAppTheme {
-        Box(
-
-        ) {
-            Box(
-                Modifier
-                    .size(45.dp)
-                    .align(Alignment.Center)
-                    .offset(-3.dp, -3.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.surface)
-
-            )
-            Box(
-                modifier = Modifier
-                    .size(45.dp)
-                    .align(Alignment.Center)
-                    .clip(RoundedCornerShape(16.dp))
-                    .border(1.dp, Color.Black, RoundedCornerShape(16.dp))
-            ) {
-                Text(
-                    text = "$number",
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-        }
-    }
-}
