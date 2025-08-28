@@ -5,13 +5,20 @@ import android.R.attr.onClick
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,18 +32,24 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.neopixl.noteapp.ui.theme.NoteAppTheme
+import com.neopixl.noteapp.ui.theme.Purple200
 
 
-@Preview(showBackground = true)
 @Composable
 fun OffsetBackgroundCard(
     modifier: Modifier = Modifier.padding(top = 8.dp, bottom = 4.dp, start = 7.dp, end = 4.dp),
-    backgroundColor: Color = MaterialTheme.colorScheme.primary,
-    borderColor: Color = Color.Black,
+    backgroundColor: Color = MaterialTheme.colorScheme.surface,
+    withOffset: Boolean = false,
+    borderColor: Color = MaterialTheme.colorScheme.outlineVariant,
     borderWidth: Dp = 0.7.dp,
     maxWidth: Boolean = false,
     onClick: () -> Unit = {},
-    content: @Composable () -> Unit = { Text("Sample") }
+    content: @Composable () -> Unit = {
+        Text(
+            "Sample",
+            color = MaterialTheme.colorScheme.onSurface
+        )
+    }
 ) {
     val boxWidthModifier = if (maxWidth) Modifier.fillMaxWidth() else Modifier.wrapContentWidth()
 
@@ -45,7 +58,7 @@ fun OffsetBackgroundCard(
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .offset(x = (-6).dp, y = (-6).dp)
+                .then(if (withOffset) Modifier.offset(x = (-6).dp, y = (-6).dp) else Modifier)
                 .clip(RoundedCornerShape(16.dp))
                 .clickable(true, onClick = onClick)// Offset as needed
                 .background(backgroundColor, shape = RoundedCornerShape(16.dp))
@@ -65,3 +78,19 @@ fun OffsetBackgroundCard(
 }
 
 
+@Preview(showBackground = true)
+@Composable
+fun previewOffsetBackgroundCard() {
+    NoteAppTheme {
+        OffsetBackgroundCard {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(imageVector = Icons.Default.Notifications, contentDescription = null)
+                Spacer(Modifier.height(4.dp))
+                Text("Sessions", color = MaterialTheme.colorScheme.onSurface)
+                Text("19")
+            }
+        }
+    }
+}

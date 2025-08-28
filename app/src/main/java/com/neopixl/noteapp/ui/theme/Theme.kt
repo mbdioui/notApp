@@ -17,11 +17,13 @@ private val DarkColorScheme = darkColorScheme(
     background = Color.White,
     secondary = Black200,
     onSecondary = Color.Black,
+    surface = Color.White,
+    onSurface = Purple600,
+    outlineVariant = Purple400,
     surfaceContainerHighest = Color.White,
     tertiary = Orange400,
     onTertiary = Black900,
     outline = Purple700,
-    surface = Blue500,
     scrim = Purple200
 )
 
@@ -35,7 +37,9 @@ private val LightColorScheme = lightColorScheme(
     tertiary = Orange400,
     onTertiary = Black900,
     outline = Purple700,
-    surface = Blue500,
+    surface = Purple50,
+    onSurface = Purple600,
+    outlineVariant = Purple400,
     scrim = Purple200
 )
 

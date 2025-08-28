@@ -60,7 +60,7 @@ fun GreetingPreview() {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(items = names) { currentName ->
-                OffsetBackgroundCard()
+                OffsetBackgroundCard(withOffset = true)
             }
         }
     }
