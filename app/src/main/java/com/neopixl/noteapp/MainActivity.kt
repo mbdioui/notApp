@@ -1,23 +1,49 @@
 package com.neopixl.noteapp
 
+import android.net.http.SslCertificate.saveState
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.neopixl.noteapp.ui.component.GroupCard
-import com.neopixl.noteapp.ui.component.OffsetBackgroundCard
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.neopixl.noteapp.ui.navigation.BottomNavTab
+import com.neopixl.noteapp.ui.navigation.MainNavHost
 import com.neopixl.noteapp.ui.theme.NoteAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -25,43 +51,139 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            NoteAppTheme {
-                val names = listOf("hello", "buddy")
-                Scaffold { innerPadding ->
-                    Column(
-                        Modifier.padding(innerPadding),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        LazyColumn(
-                            verticalArrangement = Arrangement.spacedBy(9.dp),
-                            contentPadding = PaddingValues(vertical = 8.dp, horizontal = 8.dp),
-                            horizontalAlignment = Alignment.End
-                        ) {
-                            items(items = names) { currentName ->
-                                OffsetBackgroundCard()
+            MainComposable()
+        }
+    }
+
+    @Preview
+    @Composable
+    private fun MainComposable() {
+        val navController = rememberNavController()
+
+        // État pour la tab sélectionnée
+        var selectedTabRoute by rememberSaveable { mutableStateOf(BottomNavTab.Home.route) }
+
+        NoteAppTheme {
+            Scaffold(
+                topBar = {
+                    AppTopBar(
+                        navController = navController,
+                        currentTabRoute = selectedTabRoute
+                    )
+                },
+                bottomBar = {
+                    AppBottomBar(
+                        selectedTabRoute = selectedTabRoute,
+                        onTabSelected = { tabRoute ->
+                            selectedTabRoute = tabRoute
+                            // Naviguer vers la route de l'onglet sans ajouter à la backstack
+                            navController.navigate(tabRoute) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
                             }
                         }
-                        GroupCard()
-                    }
+                    )
+                }
+            ) { innerPadding ->
+                Box(modifier = Modifier.padding(innerPadding)) {
+                    MainNavHost(
+                        navController = navController,
+                        selectedTabRoute = selectedTabRoute,
+                        onTabSelected = { selectedTabRoute = it }
+                    )
                 }
             }
         }
     }
 }
-
-@Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    NoteAppTheme {
-        val names = listOf("Sample one ", "Sample Two")
-        LazyColumn(
-            Modifier.padding(60.dp),
-            contentPadding = PaddingValues(18.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(items = names) { currentName ->
-                OffsetBackgroundCard(withOffset = true)
-            }
+private fun AppBottomBar(
+    selectedTabRoute: String,
+    onTabSelected: (String) -> Unit
+) {
+    val bottomNavTabs = listOf(
+        BottomNavTab.Home,
+        BottomNavTab.Session,
+        BottomNavTab.Explore,
+        BottomNavTab.Groups,
+        BottomNavTab.Rewards
+    )
+
+    NavigationBar {
+        bottomNavTabs.forEach { tab ->
+            NavigationBarItem(
+                selected = selectedTabRoute == tab.route,
+                onClick = { onTabSelected(tab.route) },
+                icon = {
+                    Icon(
+                        imageVector = tab.icon,
+                        contentDescription = tab.title
+                    )
+                },
+                label = {
+                    Text(text = tab.title)
+                }
+            )
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AppTopBar(
+    navController: NavHostController,
+    currentTabRoute: String
+) {
+    val backStackEntry by navController.currentBackStackEntryAsState()
+
+    // Déterminer si on peut revenir en arrière
+    val canGoBack = navController.previousBackStackEntry != null
+
+    CenterAlignedTopAppBar(
+        title = {
+            // Titre optionnel selon la tab ou la destination
+        },
+        navigationIcon = {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (canGoBack) {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Retour"
+                        )
+                    }
+                }
+                Icon(
+                    painter = painterResource(R.drawable.logo),
+                    contentDescription = "Logo de l'app",
+                    modifier = Modifier.padding(8.dp),
+                    tint = Color.Unspecified
+                )
+            }
+        },
+        actions = {
+            // Icône de notification
+            Icon(
+                imageVector = Icons.Default.Notifications,
+                contentDescription = "Notifications",
+                tint = Color.Black,
+                modifier = Modifier
+                    .size(30.dp)
+                    .border(BorderStroke(1.dp, Color.Black), CircleShape)
+                    .padding(2.dp)
+            )
+            // Icône de profil
+            Icon(
+                imageVector = Icons.Default.Face,
+                contentDescription = "Profil",
+                tint = Color.Black,
+                modifier = Modifier
+                    .size(35.dp)
+                    .padding(2.dp)
+            )
+        }
+    )
 }
