@@ -1,5 +1,6 @@
 package com.neopixl.noteapp
 
+import android.R.attr.thickness
 import android.net.http.SslCertificate.saveState
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,7 +9,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -18,7 +21,9 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
@@ -61,7 +66,7 @@ class MainActivity : ComponentActivity() {
         val navController = rememberNavController()
 
         // État pour la tab sélectionnée
-        var selectedTabRoute by rememberSaveable { mutableStateOf(BottomNavTab.Home.route) }
+        var selectedTabRoute by rememberSaveable { mutableStateOf(BottomNavTab.Session.route) }
 
         NoteAppTheme {
             Scaffold(
@@ -72,6 +77,11 @@ class MainActivity : ComponentActivity() {
                     )
                 },
                 bottomBar = {
+                    Column {  HorizontalDivider(
+                        color = Color.Black,
+                        thickness = 1.dp,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                     AppBottomBar(
                         selectedTabRoute = selectedTabRoute,
                         onTabSelected = { tabRoute ->
@@ -86,13 +96,11 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     )
-                }
+                }}
             ) { innerPadding ->
                 Box(modifier = Modifier.padding(innerPadding)) {
                     MainNavHost(
-                        navController = navController,
-                        selectedTabRoute = selectedTabRoute,
-                        onTabSelected = { selectedTabRoute = it }
+                        navController = navController
                     )
                 }
             }

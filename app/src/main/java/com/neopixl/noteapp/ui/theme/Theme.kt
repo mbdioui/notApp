@@ -13,34 +13,16 @@ import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple500,
-    onPrimary = Color.Green,
-    background = Color.White,
-    secondary = Black200,
-    onSecondary = Color.Black,
+    //container top appbar
     surface = Color.White,
-    onSurface = Purple600,
-    outlineVariant = Purple400,
-    surfaceContainerHighest = Color.White,
-    tertiary = Orange400,
-    onTertiary = Black900,
-    outline = Purple700,
-    scrim = Purple200
+    //container bottom app bar
+    surfaceContainer = Color.White,
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = Purple500,
-    onPrimary = Color.White,
-    background = Color.White,
-    secondary = Black200,
-    surfaceContainerHighest = Color.White,
-    onSecondary = Color.Black,
-    tertiary = Orange400,
-    onTertiary = Black900,
-    outline = Purple700,
-    surface = Purple50,
-    onSurface = Purple600,
-    outlineVariant = Purple400,
-    scrim = Purple200
+    surface = Color.White,
+    surfaceContainer = Color.White,
 )
 
 @Composable

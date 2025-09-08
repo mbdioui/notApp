@@ -15,14 +15,11 @@ import com.neopixl.noteapp.SessionsScreen
 
 @Composable
 fun MainNavHost(
-    navController: NavHostController,
-    selectedTabRoute: String,
-    onTabSelected: (String) -> Unit
+    navController: NavHostController
 ) {
     NavHost(
         navController = navController,
-        startDestination = BottomNavTab.Home.route,
-        route = HomeDestinations.HomeMain.route
+        startDestination = BottomNavTab.Session.route,
     ) {
         // Navigation pour l'onglet Home
         navigation(

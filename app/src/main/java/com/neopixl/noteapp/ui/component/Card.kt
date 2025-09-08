@@ -38,8 +38,8 @@ import com.neopixl.noteapp.ui.theme.Purple200
 @Composable
 fun OffsetBackgroundCard(
     modifier: Modifier = Modifier.padding(top = 8.dp, bottom = 4.dp, start = 7.dp, end = 4.dp),
-    backgroundColor: Color = MaterialTheme.colorScheme.surface,
-    withOffset: Boolean = false,
+    backgroundColor: Color = Color.Yellow,
+    withOffset: Boolean = true,
     borderColor: Color = MaterialTheme.colorScheme.outlineVariant,
     borderWidth: Dp = 0.7.dp,
     maxWidth: Boolean = false,
